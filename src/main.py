@@ -14,7 +14,7 @@ def main() -> None:
         raise RuntimeError(
             "Missing TB_HOST/TB_TOKEN. Create a .env file in the project root with:\n"
             "TB_HOST=https://thingsboard.cloud\n"
-            "TB_TOKEN=<your device token>"
+            "TB_TOKEN=4lzxxn96epsem7gn3wiz"
         )
 
     tb_cfg = ThingsBoardConfig(host=tb_host, device_token=tb_token)
