@@ -10,11 +10,13 @@ class ThingsBoardConfig:
     """
     ThingsBoard configuration.
     """
-    host: str  # e.g., https://thingsboard.cloud
-    device_token: str  # device access token
-    timeout_s: int = 10
-    retries: int = 3
-    backoff_s: float = 1.0
+    config = {
+        "host": "https://thingsboard.cloud",
+        "device_token": "4lzxxn96epsem7gn3wiz",
+        "timeout_s": 10,
+        "retries": 3,
+        "backoff_s": 1.0
+    }
 
 
 class ThingsBoardClient:
