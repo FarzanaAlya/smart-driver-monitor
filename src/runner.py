@@ -4,7 +4,7 @@ from typing import Optional
 from .config import SimulationConfig, Thresholds
 from .simulator import generate_sensor_stream
 from .edge_rules import detect_event
-from .summarizer import create_event_summary
+from .summarizer import create_event_summary, create_normal_summary
 from .models import DrivingState
 from .thingsboard_client import ThingsBoardClient, ThingsBoardConfig
 
@@ -41,6 +41,10 @@ def run_pipeline(
             summary = create_event_summary(sample, result)
             ok, status, msg = tb.send_telemetry(summary.to_telemetry())
             print(f"  -> Upload: {ok} (status={status}) {msg}")
+        else:
+            summary = create_normal_summary(sample)
+            ok, status, msg = tb.send_telemetry(summary.to_telemetry())
+            print(f"  -> Upload NORMAL: {ok} (status={status}) {msg}")
 
         # Wait until next sampling time
         time.sleep(sim_cfg.sample_interval_s)

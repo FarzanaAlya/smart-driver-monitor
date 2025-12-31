@@ -17,25 +17,29 @@ def generate_sensor_stream(
     """
     Generates an infinite stream of simulated sensor samples.
 
-    This simulates accelerometer/gyroscope + GPS + speed.
-    Occasionally injects unsafe behaviors for testing.
+    Includes:
+    - Normal driving (majority)
+    - Occasional unsafe driving events
     """
     lat = sim_cfg.base_lat
     lon = sim_cfg.base_lon
     speed = sim_cfg.base_speed_kmh
 
     while True:
-        # Baseline "normal driving" noise
-        ax = random.uniform(-0.8, 0.8)
-        ay = random.uniform(-0.8, 0.8)
-        gz = random.uniform(-10.0, 10.0)
+        # -------------------------
+        # Normal driving baseline
+        # -------------------------
+        ax = random.uniform(-2.0, 2.0)
+        ay = random.uniform(-2.0, 2.0)
+        gz = random.uniform(-30.0, 30.0)
+        speed = max(0.0, speed + random.uniform(-5.0, 5.0))
 
-        # Slight random walk for speed/location
-        speed = max(0.0, speed + random.uniform(-2.0, 2.0))
-        lat += random.uniform(-0.0003, 0.0003)
-        lon += random.uniform(-0.0003, 0.0003)
+        lat += random.uniform(-0.0002, 0.0002)
+        lon += random.uniform(-0.0002, 0.0002)
 
-        # Randomly inject an unsafe event
+        # ----------------------------------
+        # Occasionally inject unsafe events
+        # ----------------------------------
         if random.random() < sim_cfg.unsafe_injection_prob:
             event_choice = random.choice([
                 EventType.HARSH_BRAKING,
@@ -45,13 +49,19 @@ def generate_sensor_stream(
             ])
 
             if event_choice == EventType.HARSH_BRAKING:
-                ax = thresholds.harsh_braking_ax - random.uniform(0.5, 4.0)  # more negative
+                ax = thresholds.harsh_braking_ax - random.uniform(0.5, 4.0)
+
             elif event_choice == EventType.RAPID_ACCELERATION:
                 ax = thresholds.rapid_accel_ax + random.uniform(0.5, 4.0)
+
             elif event_choice == EventType.SHARP_TURN:
-                # Turn can show up in lateral accel and/or gyro
-                ay = random.choice([-1, 1]) * (thresholds.sharp_turn_ay + random.uniform(0.5, 4.0))
-                gz = random.choice([-1, 1]) * (thresholds.sharp_turn_gz + random.uniform(5.0, 60.0))
+                ay = random.choice([-1, 1]) * (
+                    thresholds.sharp_turn_ay + random.uniform(0.5, 4.0)
+                )
+                gz = random.choice([-1, 1]) * (
+                    thresholds.sharp_turn_gz + random.uniform(5.0, 60.0)
+                )
+
             elif event_choice == EventType.OVERSPEEDING:
                 speed = thresholds.overspeed_kmh + random.uniform(5.0, 40.0)
 

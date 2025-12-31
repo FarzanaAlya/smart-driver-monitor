@@ -9,7 +9,7 @@ class DrivingState(str, Enum):
 
 
 class EventType(str, Enum):
-    NONE = "None"
+    NORMAL_DRIVING = "None"
     HARSH_BRAKING = "HarshBraking"
     RAPID_ACCELERATION = "RapidAcceleration"
     SHARP_TURN = "SharpTurn"

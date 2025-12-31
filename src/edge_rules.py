@@ -48,7 +48,7 @@ def detect_event(sample: SensorSample, t: Thresholds) -> DetectionResult:
 
     return DetectionResult(
         driving_state=DrivingState.SAFE,
-        event_type=EventType.NONE,
+        event_type=EventType.NORMAL_DRIVING,
         severity=None
     )
 

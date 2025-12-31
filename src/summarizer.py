@@ -16,3 +16,17 @@ def create_event_summary(sample: SensorSample, result: DetectionResult) -> Event
         longitude=round(sample.longitude, 6),
         timestamp=sample.timestamp_iso
     )
+
+
+def create_normal_summary(sample: SensorSample) -> EventSummary:
+    """
+    Creates a summary for NORMAL (safe) driving.
+    """
+    return EventSummary(
+        event_type="Normal",
+        severity_level="Safe",
+        speed_kmh=round(sample.speed_kmh, 2),
+        latitude=round(sample.latitude, 6),
+        longitude=round(sample.longitude, 6),
+        timestamp=sample.timestamp_iso
+    )
